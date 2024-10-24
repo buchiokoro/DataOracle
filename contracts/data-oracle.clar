@@ -36,3 +36,23 @@
     }
 )
 
+;; Governance
+(define-data-var min-stake uint u10000) ;; Minimum STX required to become an oracle
+(define-data-var subscription-fee uint u100) ;; Monthly fee in STX
+(define-data-var owner principal tx-sender)
+
+;; Read-only functions
+(define-read-only (get-subscription (subscriber principal))
+    (map-get? subscriptions {subscriber: subscriber})
+)
+
+(define-read-only (get-oracle (oracle-id uint))
+    (map-get? oracles {oracle-id: oracle-id})
+)
+
+(define-read-only (get-latest-data (oracle-id uint))
+    (map-get? data-feeds {
+        oracle-id: oracle-id,
+        timestamp: (get-block-info? time u0)
+    })
+)
