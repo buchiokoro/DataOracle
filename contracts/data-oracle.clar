@@ -110,3 +110,19 @@
         ))
     )
 )
+
+(define-public (vote-oracle (oracle-id uint))
+    (let (
+        (oracle (unwrap! (get-oracle oracle-id) ERR_INVALID_ORACLE))
+        (subscription (unwrap! (get-subscription tx-sender) ERR_INVALID_SUBSCRIPTION))
+    )
+        (asserts! (get active subscription) ERR_INVALID_SUBSCRIPTION)
+        (ok (map-set oracles
+            {oracle-id: oracle-id}
+            (merge oracle {
+                votes: (+ (get votes oracle) u1),
+                active: (> (+ (get votes oracle) u1) u10)
+            })
+        ))
+    )
+)
