@@ -91,3 +91,22 @@
         ))
     )
 )
+
+(define-public (submit-data (oracle-id uint) (data-value (string-utf8 50)))
+    (let (
+        (oracle (unwrap! (get-oracle oracle-id) ERR_INVALID_ORACLE))
+    )
+        (asserts! (is-eq (get provider oracle) tx-sender) ERR_UNAUTHORIZED)
+        (ok (map-set data-feeds
+            {
+                oracle-id: oracle-id,
+                timestamp: (get-block-info? time u0)
+            }
+            {
+                value: data-value,
+                provider: tx-sender,
+                verified: false
+            }
+        ))
+    )
+)
