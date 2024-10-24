@@ -15,3 +15,24 @@
         subscription-type: (string-utf8 10)
     }
 )
+
+(define-map oracles
+    { oracle-id: uint }
+    {
+        provider: principal,
+        data-type: (string-utf8 20),
+        votes: uint,
+        active: bool,
+        stake: uint
+    }
+)
+
+(define-map data-feeds
+    { oracle-id: uint, timestamp: uint }
+    {
+        value: (string-utf8 50),
+        provider: principal,
+        verified: bool
+    }
+)
+
