@@ -73,3 +73,21 @@
         ))
     )
 )
+
+(define-public (register-oracle (data-type (string-utf8 20)))
+    (let (
+        (stake-transfer (unwrap! (stx-transfer? (var-get min-stake) tx-sender (as-contract tx-sender)) ERR_INSUFFICIENT_PAYMENT))
+        (oracle-count (len (map-get? oracles {oracle-id: u0})))
+    )
+        (ok (map-set oracles
+            {oracle-id: (+ oracle-count u1)}
+            {
+                provider: tx-sender,
+                data-type: data-type,
+                votes: u0,
+                active: false,
+                stake: (var-get min-stake)
+            }
+        ))
+    )
+)
