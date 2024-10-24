@@ -126,3 +126,18 @@
         ))
     )
 )
+
+;; Admin functions
+(define-public (set-subscription-fee (new-fee uint))
+    (begin
+        (asserts! (is-eq tx-sender (var-get owner)) ERR_UNAUTHORIZED)
+        (ok (var-set subscription-fee new-fee))
+    )
+)
+
+(define-public (set-min-stake (new-stake uint))
+    (begin
+        (asserts! (is-eq tx-sender (var-get owner)) ERR_UNAUTHORIZED)
+        (ok (var-set min-stake new-stake))
+    )
+)
