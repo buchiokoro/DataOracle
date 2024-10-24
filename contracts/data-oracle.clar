@@ -56,3 +56,20 @@
         timestamp: (get-block-info? time u0)
     })
 )
+
+;; Public functions
+(define-public (subscribe (subscription-type (string-utf8 10)))
+    (let (
+        (payment (unwrap! (stx-transfer? subscription-fee tx-sender (as-contract tx-sender)) ERR_INSUFFICIENT_PAYMENT))
+        (expiration (+ (get-block-info? time u0) u2592000)) ;; 30 days in seconds
+    )
+        (ok (map-set subscriptions
+            {subscriber: tx-sender}
+            {
+                active: true,
+                expiration: expiration,
+                subscription-type: subscription-type
+            }
+        ))
+    )
+)
